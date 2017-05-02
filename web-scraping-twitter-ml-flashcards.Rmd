@@ -1,8 +1,11 @@
 ---
 title: 'Web Scraping Twitter for #machinelearningflashcards'
+layout: post
+tags: [rstats, r, image-processing, machine-learning]
 author: "Jasmine Dumas"
-date: "5/2/2017"
-output: html_document
+output: 
+  html_document: 
+    self_contained: no
 ---
 
 ```{r setup, include=FALSE}
@@ -47,9 +50,9 @@ save_image <- function(df){
       image_scale("1200x700") %>%
       image_write(paste0("data/", ml_tweets$clean_text[i],".jpg"))
   }
-  cat("Function complete...\n")
+ 
   }
-  
+   cat("Function complete...\n")
 }
 ```
 
