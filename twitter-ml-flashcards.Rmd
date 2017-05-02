@@ -2,7 +2,6 @@
 title: 'Extracting data from Twitter for #machinelearningflashcards'
 layout: post
 tags: [rstats, r, image-processing, machine-learning]
-author: "Jasmine Dumas"
 output: 
   html_document: 
     self_contained: no
@@ -17,11 +16,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-I'm a fan of [Chris Albon](https://chrisalbon.com/)'s recent project #machinelearningflashcards on Twitter where generalized topics and methodologies are drawn out with key takeaways. It's a great approach to sharing concepts about machine learning for everyone and a timely refresher for those of us who frequently forget algorithm basics.
+I'm a fan of [Chris Albon](https://chrisalbon.com/)'s recent project [#machinelearningflashcards](https://twitter.com/hashtag/machinelearningflashcards?src=hash) on Twitter where generalized topics and methodologies are drawn out with key takeaways. It's a great approach to sharing concepts about machine learning for everyone and a timely refresher for those of us who frequently forget algorithm basics.
 
 I leveraged [Maëlle Salmon](https://github.com/maelle)'s recent blog post on the [*Faces of #rstats Twitter*](http://www.masalmon.eu/2017/03/19/facesofr/) heavily as a tutorial for this attempt at extracting data from Twitter to download the #Machinelearningflashcards.
 
+Source Repo for this work: [jasdumas/ml-flashcards](https://github.com/jasdumas/ml-flashcards)
 ___
+
+## Directions
 
 - Load libraries:
 
@@ -48,7 +50,7 @@ ml_tweets$clean_text <- str_replace(ml_tweets$clean_text, " ?(f|ht)(tp)(s?)(://)
 ml_tweets$clean_text <- str_replace(ml_tweets$clean_text, "[[:punct:]]", "") # remove punctuation
 ```
 
-- Download images of the flashcards from `media_url` column append the file name from the tweet text description and save into a folder:
+- Download images of the flashcards from the `media_url` column and append the file name from the cleaned tweet text description and save into a folder:
 ```{r}
 save_image <- function(df){
   for (i in c(1:nrow(df))){
@@ -69,4 +71,6 @@ save_image <- function(df){
 save_image(ml_tweets)
 ```
 
-At the end of this process you can view all of the #machinelearningflashcards in one place! Thanks to Chris Albon for his work on this, and I'm looking forward to re-running this script to gain knowledge on new #machinelearningflashcards that are developed in the future!
+At the end of this process you can view all of the #machinelearningflashcards in one place! Thanks to Chris Albon for his work on this, and I'm looking forward to re-running this script to gain additional knowledge from new #machinelearningflashcards that are developed in the future! 
+
+
