@@ -1,0 +1,72 @@
+---
+title: 'Extracting data from Twitter for #machinelearningflashcards'
+layout: post
+tags: [rstats, r, image-processing, machine-learning]
+author: "Jasmine Dumas"
+output: 
+  html_document: 
+    self_contained: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  fig.path = "{{ site.url }}/post_data/ml-flashcards-",
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+I'm a fan of [Chris Albon](https://chrisalbon.com/)'s recent project #machinelearningflashcards on Twitter where generalized topics and methodologies are drawn out with key takeaways. It's a great approach to sharing concepts about machine learning for everyone and a timely refresher for those of us who frequently forget algorithm basics.
+
+I leveraged [Maëlle Salmon](https://github.com/maelle)'s recent blog post on the [*Faces of #rstats Twitter*](http://www.masalmon.eu/2017/03/19/facesofr/) heavily as a tutorial for this attempt at extracting data from Twitter to download the #Machinelearningflashcards.
+
+___
+
+- Load libraries:
+
+For this project I used `rtweet` to connect the Twitter API to search for relevant tweets by the hash tag, `dplyr` to filter and pipe things, `stringr` to clean up the tweet description, and `magick` to process the images. 
+
+Note: I previously ran into trouble when downloading [*ImageMagick*](https://www.imagemagick.org/script/index.php) and detailed the errors and approaches, if you fall into the same trap I did: [https://gist.github.com/jasdumas/29caf5a9ce0104aa6bf14183ee1e3cd8](https://gist.github.com/jasdumas/29caf5a9ce0104aa6bf14183ee1e3cd8)
+```{r}
+library(rtweet)
+library(dplyr)
+library(magick)
+library(stringr)
+```
+
+- Get tweets for the hash tag and only curated tweets for Chris Albon's work: 
+```{r}
+ml_tweets <- search_tweets("#machinelearningflashcards", n = 500, include_rts = FALSE) %>% filter(screen_name == 'chrisalbon')
+```
+
+- Get text within the tweet to add to the file name by removing the hash tag and URL link: 
+```{r}
+ml_tweets$clean_text <- ml_tweets$text
+ml_tweets$clean_text <- str_replace(ml_tweets$clean_text,"#[a-zA-Z0-9]{1,}", "") # remove the hashtag
+ml_tweets$clean_text <- str_replace(ml_tweets$clean_text, " ?(f|ht)(tp)(s?)(://)(.*)[.|/](.*)", "") # remove the url link
+ml_tweets$clean_text <- str_replace(ml_tweets$clean_text, "[[:punct:]]", "") # remove punctuation
+```
+
+- Download images of the flashcards from `media_url` column append the file name from the tweet text description and save into a folder:
+```{r}
+save_image <- function(df){
+  for (i in c(1:nrow(df))){
+    image <- try(image_read(df$media_url[i]), silent = F)
+  if(class(image)[1] != "try-error"){
+    image %>%
+      image_scale("1200x700") %>%
+      image_write(paste0("data/", ml_tweets$clean_text[i],".jpg"))
+  }
+ 
+  }
+   cat("Function complete...\n")
+}
+```
+
+- Apply the function:
+```{r}
+save_image(ml_tweets)
+```
+
+At the end of this process you can view all of the #machinelearningflashcards in one place! Thanks to Chris Albon for his work on this, and I'm looking forward to re-running this script to gain knowledge on new #machinelearningflashcards that are developed in the future!
