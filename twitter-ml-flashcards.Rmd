@@ -35,11 +35,21 @@ library(rtweet)
 library(dplyr)
 library(magick)
 library(stringr)
+library(kableExtra)
+library(knitr)
 ```
 
 - Get tweets for the hash tag and only curated tweets for Chris Albon's work: 
 ```{r}
 ml_tweets <- search_tweets("#machinelearningflashcards", n = 500, include_rts = FALSE) %>% filter(screen_name == 'chrisalbon')
+```
+
+```{r}
+mt <- ml_tweets[1:3,]
+
+kable(mt, format = "html") %>%
+  kable_styling(bootstrap_options = "striped", 
+                full_width = F) 
 ```
 
 - Get text within the tweet to add to the file name by removing the hash tag and URL link: 
