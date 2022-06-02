@@ -4,4 +4,4 @@
 
 ## Contact Me
 
-Jasmine Dumas | [@jasdumas](https://twitter.com/jasdumas) | [jasdumas.github.io](http://jasdumas.github.io/)
+Jasmine Daly | [@jasdumas](https://twitter.com/jasdumas) | [jasdumas.github.io](http://jasdumas.github.io/)
